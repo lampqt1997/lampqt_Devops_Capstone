@@ -60,11 +60,9 @@ jobs:
             docker build -t ${ECR_URL}:latest .
             docker push ${ECR_URL}:latest
 
-  deploy:
 workflows:
   default:
     jobs:
       - build
       - lint
       - build_docker
-      - deploy
