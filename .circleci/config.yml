@@ -1,0 +1,70 @@
+version: 2.1
+orbs:
+  docker: circleci/docker@2.2.0
+
+
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [ app-build ]
+      - run:
+          name: Build app
+          command: |
+            cd app
+            npm install
+            npm run build
+      - save_cache:
+          paths: [ app/node_modules ]
+          key: app-build
+  lint:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [ app-lint ]
+      - run:
+          name: Scan app
+          command: |
+            cd app
+            npm install
+            npm run lint
+      - save_cache:
+          paths: [ app/node_modules ]
+          key: app-lint
+  build_docker:
+    docker:
+      - image: circleci/python:3.8
+
+    steps:
+      - checkout
+
+      - setup_remote_docker:
+          version: 20.10.7
+      - run:
+          name: go to app folder
+          command: |
+            cd app
+      - run:
+          name: Authenticate with AWS ECR
+          command: |
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_URL}
+      - run:
+          name: Build and Push Docker Image to ECR
+          command: |
+            docker build -t ${ECR_URL}:latest .
+            docker push ${ECR_URL}:latest
+
+  deploy:
+workflows:
+  default:
+    jobs:
+      - build
+      - lint
+      - build_docker
+      - deploy
