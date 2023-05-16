@@ -28,7 +28,7 @@ jobs:
       - restore_cache:
           keys: [ app-lint ]
       - run:
-          name: Scan app
+          name: Lint app
           command: |
             cd app
             npm install
