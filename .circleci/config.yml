@@ -15,13 +15,8 @@ jobs:
       - run:
           name: Build app
           command: |
-            pwd
-            ls -la
             cd app
-            pwd
-            ls -la
             npm install
-            npm run build
       - save_cache:
           paths: [ app/node_modules ]
           key: app-build
