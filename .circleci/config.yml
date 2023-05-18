@@ -49,7 +49,7 @@ jobs:
             cd app
             
             # Build the Docker image
-            docker build -t your-image:latest .
+            docker build -t lampqt:latest .
             
             # Tag the Docker image with ECR repository URI
             ECR_REPOSITORY="609874051346.dkr.ecr.us-east-1.amazonaws.com"
