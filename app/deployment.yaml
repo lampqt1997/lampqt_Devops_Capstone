@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lampqt-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lampqt
+  template:
+    metadata:
+      labels:
+        app: lampqt
+    spec:
+      containers:
+        - name: lampqt
+          image: 609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest
+          ports:
+            - containerPort: 3000
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

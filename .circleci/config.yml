@@ -39,24 +39,27 @@ jobs:
   build_docker:
     docker:
       - image: circleci/python:3.8
-
     steps:
       - checkout
       - setup_remote_docker:
           version: 20.10.7
       - run:
-          name: go to app folder
-          command: |
-            cd app
-      - run:
-          name: Authenticate with AWS ECR
-          command: |
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_URL}
-      - run:
           name: Build and Push Docker Image to ECR
           command: |
+            cd app
+            
+            # Build the Docker image
+            docker build -t your-image:latest .
+            
+            # Tag the Docker image with ECR repository URI
+            ECR_REPOSITORY="609874051346.dkr.ecr.us-east-1.amazonaws.com"
+            docker tag lampqt:latest $ECR_REPOSITORY
+            
             docker build -t ${ECR_URL}:latest .
             docker push ${ECR_URL}:latest
+            
+            $(aws ecr get-login --no-include-email --region us-east-1)
+            docker push $ECR_REPOSITORY
 
 workflows:
   default:
