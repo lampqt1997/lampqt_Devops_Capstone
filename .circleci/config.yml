@@ -44,6 +44,12 @@ jobs:
       - setup_remote_docker:
           version: 20.10.7
       - run:
+          name: Install AWS CLI
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - run:
           name: Build and Push Docker Image to ECR
           command: |
             cd app
