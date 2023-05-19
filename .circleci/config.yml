@@ -41,12 +41,8 @@ jobs:
               # Create the EKS cluster
               eksctl create cluster -f eks/cluster.yaml
               kubectl get nodes
+              aws s3 cp s3://lampqt-kube/kubeconfig ~/.kube/config
             fi
-
-      - run:
-          name: Move config file to s3
-          command: |
-            aws s3 cp s3://bucket-name/path/to/kubeconfig ~/.kube/config
       - save_cache:
           paths:
             - ~/.kube/config
