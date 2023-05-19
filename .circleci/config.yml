@@ -1,9 +1,6 @@
 version: 2.1
 orbs:
   docker: circleci/docker@2.2.0
-  kubectl: circleci/kubectl@1.3.0
-  aws-cli: circleci/aws-cli@1.2.0
-  eksctl: circleci/eksctl@0.2.0
 
 jobs:
   create-cluster:
@@ -11,13 +8,24 @@ jobs:
       - image: circleci/python:3.8
     steps:
       - checkout
-      - kubectl/install
-      - aws-cli/install
-      - eksctl/install
       - run:
-          name: check version
+          name: Install
           command: |
             # Install AWS CLI
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+
+            # Install eksctl
+            sudo curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin
+            
+            # Install kubectl
+            curl --silent --location "https://dl.k8s.io/release/$(curl --silent --location https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" --output kubectl
+            sudo install kubectl /usr/local/bin/
+            kubectl version --client
+            
+            # Verify installations
             aws --version
             eksctl version
             kubectl get pods
