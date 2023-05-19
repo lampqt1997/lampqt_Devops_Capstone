@@ -40,7 +40,7 @@ jobs:
             else
               # Create the EKS cluster
               eksctl create cluster -f eks/cluster.yaml
-              kubectl get 
+              kubectl get nodes
             fi
 
       - run:
