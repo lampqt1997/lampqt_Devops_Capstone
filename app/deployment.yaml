@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: lampqt-deployment
+  namespace: lampqt-capstone
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: lampqt
@@ -16,9 +17,39 @@ spec:
         - name: lampqt
           image: 609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest
           ports:
-            - containerPort: 3000
+            - containerPort: 80
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1
+      maxSurge: 50%
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lampqt-service
+  namespace: lampqt-capstone
+spec:
+  selector:
+    app: lampqt
+  type: LoadBalancer
+  ports:
+    - port: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lampqt-ingress
+  namespace: lampqt-capstone
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lampqt-service
+                port:
+                  number: 80

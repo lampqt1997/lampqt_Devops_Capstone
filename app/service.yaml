@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: lampqt-loadbalancer
+  name: my-app-service
 spec:
-  type: LoadBalancer
   selector:
     app: lampqt
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 80

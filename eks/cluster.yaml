@@ -6,7 +6,7 @@ metadata:
   region: us-east-1
   version: '1.26'
 
-availabilityZones: ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1f"]
+availabilityZones: ["us-east-1a", "us-east-1b"]
 
 nodeGroups:
   - name: lampqt-nodegroup

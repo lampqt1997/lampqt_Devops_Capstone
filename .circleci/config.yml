@@ -2,9 +2,25 @@ version: 2.1
 orbs:
   docker: circleci/docker@2.2.0
 
-
-
 jobs:
+  create-cluster:
+    docker:
+      - image: amazon/aws-cli:2.x
+    steps:
+      - checkout
+      - run:
+          name: Create EKS cluster
+          command: |
+            # Set the name of the cluster
+            CLUSTER_NAME="lampqt-cluster"
+            
+            # Check if the cluster already exists
+            if aws eks describe-cluster --name "$CLUSTER_NAME" >/dev/null 2>&1; then
+              echo "The EKS cluster '$CLUSTER_NAME' already exists."
+            else
+              # Create the EKS cluster
+              eksctl create cluster -f eks/cluster.yaml
+            fi
   build:
     docker:
       - image: circleci/node:13.8.0
@@ -68,11 +84,35 @@ jobs:
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 609874051346.dkr.ecr.us-east-1.amazonaws.com
             docker push $ECR_REPOSITORY
 
+
+  deploy:
+    docker:
+      - image: bearengineer/awscli-kubectl
+    steps:
+      - checkout
+      - run:
+          name: Deploy Docker Image to EKS Cluster
+          command: |
+            aws eks --region us-east-1 update-kubeconfig --name lampqt-capstone
+            kubectl create namespace lampqt-capstone
+            NS=$(kubectl get namespace lampqt-capstone |lampqt-capstone|awk '{print $1}')
+            echo $NS
+            if [ "$NS" = "lampqt-capstone" ]
+            then
+              echo "Namespace exists"
+            else
+              echo "Creating Namespace"
+              kubectl create namespace lampqt-capstone
+            fi
+            kubectl apply -f app/deployment.yml
 workflows:
   default:
     jobs:
+      - create-cluster
       - build
       - lint:
           requires: [build]
       - build_docker:
-          requires: [lint]
+          requires: [lint, create-cluster]
+      - deploy:
+          requires: [ build_docker]
