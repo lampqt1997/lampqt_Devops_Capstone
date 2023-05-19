@@ -23,11 +23,11 @@ jobs:
             # Install kubectl
             curl --silent --location "https://dl.k8s.io/release/$(curl --silent --location https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" --output kubectl
             sudo install kubectl /usr/local/bin/
-            kubectl version --client
             
             # Verify installations
             aws --version
             eksctl version
+            kubectl version --client
       - run:
           name: Create EKS cluster
           command: |
