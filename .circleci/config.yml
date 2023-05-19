@@ -28,7 +28,6 @@ jobs:
             # Verify installations
             aws --version
             eksctl version
-            kubectl version
       - run:
           name: Create EKS cluster
           command: |
