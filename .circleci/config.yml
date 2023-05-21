@@ -37,6 +37,7 @@ jobs:
             # Check if the cluster already exists
             if aws eks describe-cluster --name "$CLUSTER_NAME" >/dev/null 2>&1; then
               echo "The EKS cluster '$CLUSTER_NAME' already exists."
+              aws s3 cp s3://lampqt-kube/kubeconfig ~/.kube/config 
             else
               # Create the EKS cluster
               eksctl create cluster -f eks/cluster.yaml
@@ -125,8 +126,8 @@ jobs:
           command: |
             export KUBECONFIG=$HOME/.kube/config
       - run:
-          name: Get pods
-          command: kubectl get pods
+          name: Get nodes
+          command: kubectl get nodes
       - run:
           name: Deploy Docker Image to EKS Cluster
           command: |
