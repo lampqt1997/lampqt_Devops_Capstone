@@ -104,7 +104,7 @@ jobs:
             # Build the Docker image and run local
             docker build -t lampqt .
             docker run -p 80:80 lampqt
-            curl http://localhos
+            curl http://localhost
             
             # Tag the Docker image with ECR repository URI
             ECR_REPOSITORY="609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest"
