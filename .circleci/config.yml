@@ -111,22 +111,25 @@ jobs:
 
   deploy:
     docker:
-      - image: bearengineer/awscli-kubectl
+      - image: circleci/python:3.8
     steps:
       - checkout
       - run:
           name: Get config
           command: |
+            # Install kubectl
+            curl --silent --location "https://dl.k8s.io/release/$(curl --silent --location https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" --output kubectl
+            sudo install kubectl /usr/local/bin/
+            
             aws s3 cp s3://lampqt-kube/kubeconfig ~/.kube/config
-            kubectl  config view
+            kubectl  config 
             export KUBECONFIG=$KUBECONFIG:~/.kube/config
-            echo "after export"
-            kubectl  config view
+            kubectl get nodes
       - run:
           name: Deploy Docker Image to EKS Cluster
           command: |
-            kubectl  create namespace lampqt-capstone
-            NS=$(kubectl  get namespace lampqt-capstone | awk '{print $1}' | grep -v NAME)
+            kubectl create namespace lampqt-capstone
+            NS=$(kubectl get namespace lampqt-capstone | awk '{print $1}' | grep -v NAME)
             echo $NS
             if [ "$NS" = "lampqt-capstone" ]
             then
@@ -135,8 +138,8 @@ jobs:
               echo "Creating Namespace"
               kubectl  create namespace lampqt-capstone
             fi
-            kubectl  apply -f app/deployment.yml
-            LB_URL=$(kubectl  get services -l lampqt-service -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
+            kubectl apply -f app/deployment.yml
+            LB_URL=$(kubectl get services -l lampqt-service -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
             echo "Load Balancer URL: $LB_URL"
 
 
