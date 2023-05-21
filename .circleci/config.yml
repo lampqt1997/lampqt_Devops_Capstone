@@ -163,7 +163,7 @@ jobs:
           command: |
             pwd
             ls -la
-            LB_URL=$(cat $CIRCLE_WORKING_DIRECTORY/app/url.txt)        
+            LB_URL=$(cat app/url.txt)        
             echo "$LB_URL"
             curl $LB_URL
             status_code=$(curl -s -o /dev/null -w "%{http_code}" $URL)
