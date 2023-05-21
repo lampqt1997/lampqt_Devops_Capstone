@@ -124,9 +124,9 @@ jobs:
       - run:
           name: Get nodes
           command: |
-            ls -la $HOME/.kube
-            ls -la $HOME/.kube/config
-            cat $HOME/.kube/config
+            ls -la /home/circleci/.kube
+            ls -la /home/circleci/.kube/config
+            cat /home/circleci/.kube/config
             kubectl config view
       - run:
           name: Deploy Docker Image to EKS Cluster
