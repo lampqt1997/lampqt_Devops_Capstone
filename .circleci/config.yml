@@ -118,11 +118,12 @@ jobs:
           name: Get config
           command: |
             aws s3 cp s3://lampqt-kube/kubeconfig ~/.kube/config    
-            ls -la ~/
             ls -la ~/.kube
-            ls -la ~/.kube/config
             cat ~/.kube/config
             kubectl --kubeconfig=~/.kube/config config view
+            eval "kubectl --kubeconfig=~/.kube/config config view"
+            kubectl --kubeconfig=/home/circleci/.kube/config config view
+
       - run:
           env:
             KUBECONFIG: ~/.kube/config
