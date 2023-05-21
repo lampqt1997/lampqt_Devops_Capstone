@@ -121,23 +121,23 @@ jobs:
             ls -la ~/
             ls -la ~/.kube
             ls -la ~/.kube/config
-            kubectl config view
+            kubectl --kubeconfig=~/.kube/config config view
       - run:
           env:
             KUBECONFIG: ~/.kube/config
           name: Deploy Docker Image to EKS Cluster
           command: |
-            kubectl create namespace lampqt-capstone
-            NS=$(kubectl get namespace lampqt-capstone | awk '{print $1}' | grep -v NAME)
+            kubectl --kubeconfig=~/.kube/config create namespace lampqt-capstone
+            NS=$(kubectl --kubeconfig=~/.kube/config get namespace lampqt-capstone | awk '{print $1}' | grep -v NAME)
             echo $NS
             if [ "$NS" = "lampqt-capstone" ]
             then
               echo "Namespace exists"
             else
               echo "Creating Namespace"
-              kubectl create namespace lampqt-capstone
+              kubectl --kubeconfig=~/.kube/config create namespace lampqt-capstone
             fi
-            kubectl apply -f app/deployment.yml
+            kubectl --kubeconfig=~/.kube/config apply -f app/deployment.yml
             LB_URL=$(kubectl get services -l lampqt-service -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
             echo "Load Balancer URL: $LB_URL"
 
