@@ -116,8 +116,6 @@ jobs:
       - checkout
       - run:
           name: Get config
-          env:
-            KUBECONFIG: ~/.kube/config
           command: |
             aws s3 cp s3://lampqt-kube/kubeconfig ~/.kube/config    
             ls -la ~/
@@ -125,6 +123,8 @@ jobs:
             ls -la ~/.kube/config
             kubectl config view
       - run:
+          env:
+            KUBECONFIG: ~/.kube/config
           name: Deploy Docker Image to EKS Cluster
           command: |
             kubectl create namespace lampqt-capstone
