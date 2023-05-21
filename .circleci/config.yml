@@ -145,12 +145,12 @@ jobs:
             fi
             kubectl config set-context --current --namespace=lampqt-capstone
             kubectl apply -f app/deployment.yaml
-            LB_URL=$(kubectl get services -n lampqt-capstone lampqt-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            LB_URL=$(kubectl get services -l lampqt-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
             echo "Load Balancer URL: $LB_URL"
             echo "$LB_URL" > app/url.txt
             cat app/url.txt
             aws s3 cp app/url.txt s3://lampqt-kube/url.txt
-            kubectl get deployments -n lampqt-capstone
+            kubectl get deployments
 
             # redeploy if docker-image was changed
             kubectl set image deployment/lampqt-deployment lampqt=609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest
