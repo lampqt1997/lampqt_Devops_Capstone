@@ -158,6 +158,9 @@ jobs:
 
             # redeploy if docker-image was changed
             kubectl -n lampqt-capstone set image deployment/lampqt-deployment lampqt=609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest
+            
+            kubectl -n lampqt-capstone rollout status deployment lampqt-deployment
+
       - run:
           name: smock test
           command: |
@@ -166,6 +169,7 @@ jobs:
             LB_URL=$(cat app/url.txt)        
             echo "$LB_URL"
             curl $LB_URL
+            echo ""
             status_code=$(curl -s -o /dev/null -w "%{http_code}" $LB_URL)
             if [[ $status_code =~ ^2[0-9]{2}$ ]]; then
               echo "Curl succeeded. Return value: 0"
@@ -183,10 +187,10 @@ workflows:
   default:
     jobs:
       - create-cluster
-#      - build
-#      - lint:
-#          requires: [build]
-#      - build_docker:
-#          requires: [lint, create-cluster]
+      - build
+      - lint:
+          requires: [build]
+      - build_docker:
+          requires: [lint, create-cluster]
       - deploy:
           requires: [create-cluster]
