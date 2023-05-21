@@ -120,6 +120,9 @@ jobs:
             aws s3 cp s3://lampqt-kube/kubeconfig ~/.kube/config    
             ls -la ~/.kube
             cat ~/.kube/config
+            echo "debug"
+            pwd
+            ls -la /root/
             kubectl --kubeconfig=~/.kube/config config view
             eval "kubectl --kubeconfig=~/.kube/config config view"
             kubectl --kubeconfig=/home/circleci/.kube/config config view
@@ -130,18 +133,18 @@ jobs:
           command: |
             ls -la ~/.kube
             cat ~/.kube/config
-            kubectl --kubeconfig=~/.kube/config create namespace lampqt-capstone
-            NS=$(kubectl --kubeconfig=~/.kube/config get namespace lampqt-capstone | awk '{print $1}' | grep -v NAME)
+            kubectl --kubeconfig=/root/.kube/config create namespace lampqt-capstone
+            NS=$(kubectl --kubeconfig=/root/.kube/config get namespace lampqt-capstone | awk '{print $1}' | grep -v NAME)
             echo $NS
             if [ "$NS" = "lampqt-capstone" ]
             then
               echo "Namespace exists"
             else
               echo "Creating Namespace"
-              kubectl --kubeconfig=~/.kube/config create namespace lampqt-capstone
+              kubectl --kubeconfig=/root/.kube/config create namespace lampqt-capstone
             fi
-            kubectl --kubeconfig=~/.kube/config apply -f app/deployment.yml
-            LB_URL=$(kubectl get services -l lampqt-service -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
+            kubectl --kubeconfig=/root/.kube/config apply -f app/deployment.yml
+            LB_URL=$(kubectl --kubeconfig=/root/.kube/config get services -l lampqt-service -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
             echo "Load Balancer URL: $LB_URL"
 
 
