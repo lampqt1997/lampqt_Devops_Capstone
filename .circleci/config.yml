@@ -143,14 +143,29 @@ jobs:
               echo "Creating Namespace"
               kubectl create namespace lampqt-capstone
             fi
-            pwd;ls -la
             kubectl apply -f app/deployment.yaml
-            kubectl get services -n lampqt-capstone
             LB_URL=$(kubectl get services -n lampqt-capstone lampqt-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
             echo "Load Balancer URL: $LB_URL"
             echo "$LB_URL" > app/url.txt
             cat app/url.txt
             aws s3 cp app/url.txt s3://lampqt-kube/url.txt
+            
+            # redeploy if docker-image was changed
+            kubectl set image deployment/lampqt-deployment 609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest
+      - run:
+          name: smock test
+          command: |
+            curl $URL
+            status_code=$(curl -s -o /dev/null -w "%{http_code}" $URL)
+            if [[ $status_code =~ ^2[0-9]{2}$ ]]; then
+              echo "Curl succeeded. Return value: 0"
+              exit 0
+            else
+              echo "Curl failed. Return value: 1"
+              exit 1
+            fi
+            
+            
 
 
 
