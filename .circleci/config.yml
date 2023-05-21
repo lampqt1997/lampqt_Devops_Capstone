@@ -41,7 +41,7 @@ jobs:
               # Create the EKS cluster
               eksctl create cluster -f eks/cluster.yaml
               kubectl get nodes
-              aws s3 cp s3://lampqt-kube/kubeconfig ~/.kube/config
+              aws s3 cp ~/.kube/config s3://lampqt-kube/kubeconfig
             fi
       - save_cache:
           paths:
