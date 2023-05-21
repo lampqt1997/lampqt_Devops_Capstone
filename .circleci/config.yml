@@ -161,6 +161,7 @@ jobs:
       - run:
           name: smock test
           command: |
+            LB_URL=$(cat $CIRCLE_WORKING_DIRECTORY/app/url.txt)        
             echo "$LB_URL"
             curl $LB_URL
             status_code=$(curl -s -o /dev/null -w "%{http_code}" $URL)
