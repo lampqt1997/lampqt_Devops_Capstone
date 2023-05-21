@@ -124,6 +124,7 @@ jobs:
       - run:
           name: Get nodes
           command: |
+            cat ~/.kube/config
             kubectl config view
       - run:
           name: Deploy Docker Image to EKS Cluster
