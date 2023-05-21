@@ -151,7 +151,7 @@ jobs:
             aws s3 cp app/url.txt s3://lampqt-kube/url.txt
             
             # redeploy if docker-image was changed
-            kubectl set image deployment/lampqt-deployment 609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest
+            kubectl set image deployment/lampqt-deployment lampqt=609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest
       - run:
           name: smock test
           command: |
