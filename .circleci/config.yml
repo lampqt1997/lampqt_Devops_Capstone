@@ -144,7 +144,7 @@ jobs:
               kubectl create namespace lampqt-capstone
             fi
             pwd;ls -la
-            kubectl apply -f app/deployment.yml
+            kubectl apply -f app/deployment.yaml
             LB_URL=$(kubectl get services -l lampqt-service -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
             echo "Load Balancer URL: $LB_URL"
 
