@@ -122,10 +122,6 @@ jobs:
           keys:
             - kubeconfig-{{ .Branch }}
       - run:
-          name: Set kubeconfig path
-          command: |
-            export KUBECONFIG=$HOME/.kube/config
-      - run:
           name: Get nodes
           command: kubectl get nodes
       - run:
