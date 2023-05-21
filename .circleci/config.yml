@@ -161,6 +161,9 @@ jobs:
             # redeploy if docker-image was changed
             kubectl -n lampqt-capstone set image deployment/lampqt-deployment lampqt=609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:v2
             
+            kubectl -n lampqt-capstone get nodes
+            kubectl -n lampqt-capstone get pods
+            
             kubectl -n lampqt-capstone rollout status deployment lampqt-deployment
 
       - run:
