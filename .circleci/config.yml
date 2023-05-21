@@ -112,9 +112,9 @@ jobs:
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 609874051346.dkr.ecr.us-east-1.amazonaws.com
             docker push $ECR_REPOSITORY
             
-            docker run -d -p 80:80 lampqt
+            docker run -d -p 8080:80 lampqt
             sleep 10 && pwd
-            curl localhost
+            curl localhost:8080
 
   deploy:
     docker:
