@@ -102,7 +102,7 @@ jobs:
             cd app
             
             # Build the Docker image and run local
-            docker --no-cache build -t lampqt .
+            docker build -t lampqt .
             docker run -p 80:80 lampqt
             curl http://localhos
             
