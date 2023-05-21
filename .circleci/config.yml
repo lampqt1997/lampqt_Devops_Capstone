@@ -145,7 +145,7 @@ jobs:
             fi
             pwd;ls -la
             kubectl apply -f app/deployment.yaml
-            kubectl get services -l lampqt-service
+            kubectl get services
             LB_URL=$(kubectl get services -l lampqt-service -o json | jq -r '.items[0].status.loadBalancer.ingress[0].hostname')
             echo "Load Balancer URL: $LB_URL"
 
