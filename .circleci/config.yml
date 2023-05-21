@@ -113,7 +113,7 @@ jobs:
             docker push $ECR_REPOSITORY
             
             docker run -d -p 80:80 lampqt
-            curl http://localhost:80
+            curl http://localhost
 
   deploy:
     docker:
