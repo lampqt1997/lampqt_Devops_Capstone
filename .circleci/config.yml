@@ -121,6 +121,7 @@ jobs:
             ls -la ~/
             ls -la ~/.kube
             ls -la ~/.kube/config
+            cat ~/.kube/config
             kubectl --kubeconfig=~/.kube/config config view
       - run:
           env:
