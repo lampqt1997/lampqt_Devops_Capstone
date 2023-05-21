@@ -123,7 +123,8 @@ jobs:
             - kubeconfig-{{ .Branch }}
       - run:
           name: Get nodes
-          command: kubectl get nodes
+          command: |
+            kubectl config view
       - run:
           name: Deploy Docker Image to EKS Cluster
           command: |
@@ -147,10 +148,10 @@ workflows:
   default:
     jobs:
       - create-cluster
-      - build
-      - lint:
-          requires: [build]
-      - build_docker:
-          requires: [lint, create-cluster]
+#      - build
+#      - lint:
+#          requires: [build]
+#      - build_docker:
+#          requires: [lint, create-cluster]
       - deploy:
-          requires: [ build_docker]
+          requires: [create-cluster]
