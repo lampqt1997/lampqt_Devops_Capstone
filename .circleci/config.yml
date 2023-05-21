@@ -146,8 +146,10 @@ jobs:
             pwd;ls -la
             kubectl apply -f app/deployment.yaml
             kubectl get services -n lampqt-capstone
-            LB_URL=$(kubectl get services -l lampqt-service -n lampqt-capstone -o json | jq -r '.items[0].status.loadBalancer.ingress[0].hostname')
+            LB_URL=$(kubectl get services -n lampqt-capstone lampqt-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
             echo "Load Balancer URL: $LB_URL"
+            echo "$URL" > app/url.txt
+            aws s3 cp s3://lampqt-kube/url.txt app/url.txt
 
 
 
