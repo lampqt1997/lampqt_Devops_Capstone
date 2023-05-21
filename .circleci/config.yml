@@ -37,21 +37,13 @@ jobs:
             # Check if the cluster already exists
             if aws eks describe-cluster --name "$CLUSTER_NAME" >/dev/null 2>&1; then
               echo "The EKS cluster '$CLUSTER_NAME' already exists."
-              aws s3 cp s3://lampqt-kube/kubeconfig /home/circleci/.kube/config
-              ls -la /home/circleci/.kube
-              ls -la /home/circleci/.kube/config
-              cat /home/circleci/.kube/config
             else
               # Create the EKS cluster
               eksctl create cluster -f eks/cluster.yaml
               kubectl get nodes
-              aws s3 cp ~/.kube/config s3://lampqt-kube/kubeconfig
-              
+              aws s3 cp ~/.kube/config s3://lampqt-kube/kubeconfig            
             fi
-      - save_cache:
-          paths:
-            - /home/circleci/.kube/config
-          key: kubeconfig-{{ .Branch }}
+ 
 
   build:
     docker:
@@ -122,15 +114,13 @@ jobs:
       - image: bearengineer/awscli-kubectl
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - kubeconfig-{{ .Branch }}
       - run:
-          name: Get nodes
+          name: Get config
           command: |
-            ls -la /home/circleci/.kube
-            ls -la /home/circleci/.kube/config
-            cat /home/circleci/.kube/config
+            aws s3 cp s3://lampqt-kube/kubeconfig ~/.kube/config    
+            ls -la ~/
+            ls -la ~/.kube
+            ls -la ~/.kube/config
             kubectl config view
       - run:
           name: Deploy Docker Image to EKS Cluster
