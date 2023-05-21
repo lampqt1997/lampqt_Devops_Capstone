@@ -103,19 +103,13 @@ jobs:
             
             # Build the Docker image and run local
             docker build -t lampqt .
-            
-            
+          
             # Tag the Docker image with ECR repository URI
             ECR_REPOSITORY="609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest"
             docker tag lampqt:latest $ECR_REPOSITORY
             
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 609874051346.dkr.ecr.us-east-1.amazonaws.com
-            docker push $ECR_REPOSITORY
-            
-            docker run -d -p 8080:80 --name my_lampqt_container lampqt
-            docker logs my_lampqt_container
-            sleep 10 && pwd
-            curl localhost:8080
+            docker push $ECR_REPOSITORY         
 
   deploy:
     docker:
