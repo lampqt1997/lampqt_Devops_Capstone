@@ -161,8 +161,8 @@ jobs:
       - run:
           name: smock test
           command: |
-            echo "$URL"
-            curl $URL
+            echo "$LB_URL"
+            curl $LB_URL
             status_code=$(curl -s -o /dev/null -w "%{http_code}" $URL)
             if [[ $status_code =~ ^2[0-9]{2}$ ]]; then
               echo "Curl succeeded. Return value: 0"
