@@ -125,6 +125,10 @@ jobs:
             # Install kubectl
             curl --silent --location "https://dl.k8s.io/release/$(curl --silent --location https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" --output kubectl
             sudo install kubectl /usr/local/bin/
+            
+            sudo apt-get update
+            sudo apt-get install -y curl
+
       - run:
           name: Get config
           command: |
