@@ -42,11 +42,14 @@ jobs:
               # Create the EKS cluster
               eksctl create cluster -f eks/cluster.yaml
               kubectl get nodes
-              aws s3 cp ~/.kube/config s3://lampqt-kube/kubeconfig
+              aws s3 cp /home/circleci/.kube/config s3://lampqt-kube/kubeconfig
+              ls -la /home/circleci/.kube
+              ls -la /home/circleci/.kube/config
+              cat /home/circleci/.kube/config
             fi
       - save_cache:
           paths:
-            - ~/.kube/config
+            - /home/circleci/.kube/config
           key: kubeconfig-{{ .Branch }}
 
   build:
