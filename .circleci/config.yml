@@ -142,7 +142,7 @@ jobs:
               echo "Namespace exists"
             else
               echo "Creating Namespace"
-              kubectl  create namespace lampqt-capstone
+              kubectl create namespace lampqt-capstone
             fi
             pwd;ls -la
             kubectl apply -f app/deployment.yml
