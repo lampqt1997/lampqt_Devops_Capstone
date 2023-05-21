@@ -193,4 +193,4 @@ workflows:
       - build_docker:
           requires: [lint, create-cluster]
       - deploy:
-          requires: [create-cluster]
+          requires: [build_docker]
