@@ -90,6 +90,9 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
             
+            sudo apt-get update
+            sudo apt-get install -y curl
+            
             export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
             export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
             export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
@@ -98,8 +101,10 @@ jobs:
           command: |
             cd app
             
-            # Build the Docker image
-            docker build -t lampqt .
+            # Build the Docker image and run local
+            docker --no-cache build -t lampqt .
+            docker run -p 80:80 lampqt
+            curl http://localhos
             
             # Tag the Docker image with ECR repository URI
             ECR_REPOSITORY="609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest"
