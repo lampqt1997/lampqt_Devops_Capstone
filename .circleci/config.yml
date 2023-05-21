@@ -113,6 +113,7 @@ jobs:
             docker push $ECR_REPOSITORY
             
             docker run -d -p 8080:80 lampqt
+            docker ps
             sleep 10 && pwd
             curl localhost:8080
 
