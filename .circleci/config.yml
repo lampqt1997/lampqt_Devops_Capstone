@@ -105,8 +105,8 @@ jobs:
             docker build -t lampqt .
           
             # Tag the Docker image with ECR repository URI
-            ECR_REPOSITORY="609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest"
-            docker tag lampqt:latest $ECR_REPOSITORY
+            ECR_REPOSITORY="609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:v2"
+            docker tag lampqt:v2 $ECR_REPOSITORY
             
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 609874051346.dkr.ecr.us-east-1.amazonaws.com
             docker push $ECR_REPOSITORY         
@@ -159,7 +159,7 @@ jobs:
             kubectl get deployments -n lampqt-capstone
 
             # redeploy if docker-image was changed
-            kubectl -n lampqt-capstone set image deployment/lampqt-deployment lampqt=609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:latest
+            kubectl -n lampqt-capstone set image deployment/lampqt-deployment lampqt=609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:v2
             
             kubectl -n lampqt-capstone rollout status deployment lampqt-deployment
 
