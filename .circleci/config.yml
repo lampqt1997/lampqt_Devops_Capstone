@@ -102,7 +102,7 @@ jobs:
             cd app
             
             # Build the Docker image and run local
-            docker build -t lampqt .
+            docker build -t lampqt:v2 .
           
             # Tag the Docker image with ECR repository URI
             ECR_REPOSITORY="609874051346.dkr.ecr.us-east-1.amazonaws.com/lampqt:v2"
