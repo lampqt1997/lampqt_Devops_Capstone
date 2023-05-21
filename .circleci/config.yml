@@ -116,6 +116,8 @@ jobs:
       - checkout
       - run:
           name: Get config
+          env:
+            KUBECONFIG: ~/.kube/config
           command: |
             aws s3 cp s3://lampqt-kube/kubeconfig ~/.kube/config    
             ls -la ~/
