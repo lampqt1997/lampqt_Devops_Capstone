@@ -122,29 +122,29 @@ jobs:
             cat ~/.kube/config
             echo "debug"
             pwd
-            ls -la /root/
-            kubectl --kubeconfig=~/.kube/config config view
-            eval "kubectl --kubeconfig=~/.kube/config config view"
-            kubectl --kubeconfig=/home/circleci/.kube/config config view
-            export KUBECONFIG=~/.kube/config
+            ls -la /root/project/
+            kubectl --kubeconfig=/root/project/.kube/config config view
+            eval "kubectl --kubeconfig=/root/project/.kube/config config view"
+            kubectl --kubeconfig=/root/project/.kube/config config view
+            export KUBECONFIG=/root/project/.kube/config
 
       - run:
           name: Deploy Docker Image to EKS Cluster
           command: |
             ls -la ~/.kube
             cat ~/.kube/config
-            kubectl --kubeconfig=/root/.kube/config create namespace lampqt-capstone
-            NS=$(kubectl --kubeconfig=/root/.kube/config get namespace lampqt-capstone | awk '{print $1}' | grep -v NAME)
+            kubectl --kubeconfig=/root/project/.kube/config create namespace lampqt-capstone
+            NS=$(kubectl --kubeconfig=/root/project/.kube/config get namespace lampqt-capstone | awk '{print $1}' | grep -v NAME)
             echo $NS
             if [ "$NS" = "lampqt-capstone" ]
             then
               echo "Namespace exists"
             else
               echo "Creating Namespace"
-              kubectl --kubeconfig=/root/.kube/config create namespace lampqt-capstone
+              kubectl --kubeconfig=/root/project/.kube/config create namespace lampqt-capstone
             fi
-            kubectl --kubeconfig=/root/.kube/config apply -f app/deployment.yml
-            LB_URL=$(kubectl --kubeconfig=/root/.kube/config get services -l lampqt-service -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
+            kubectl --kubeconfig=/root/project/.kube/config apply -f app/deployment.yml
+            LB_URL=$(kubectl --kubeconfig=/root/project/.kube/config get services -l lampqt-service -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
             echo "Load Balancer URL: $LB_URL"
 
 
